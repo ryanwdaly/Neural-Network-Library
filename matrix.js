@@ -12,11 +12,19 @@ class Matrix {
             }
         }
     }
+    
+    static fromArray(arr) {
+        let m = new Matrix(arr.length, 1);
+        for (let i = 0; i < arr.length; i++) {
+            m.data[i][0] = arr[i];
+        }
+        return m;
+    }
 
     static multiply(a, b) {
         // Multiply product
-        if (a.cols !== b.rows) {
-            console.log("Cols of A must match rows of B");
+        if (a.cols != b.rows) {
+            console.log("Cols of A must match rows of B!");
             return undefined;
         }
         let result = new Matrix(a.rows, b.cols);
@@ -43,6 +51,16 @@ class Matrix {
         return result;
     }
 
+    toArray() {
+        let arr = [];
+        for(let i = 0; i < this.rows; i++){
+            for(let j = 0; j < this.cols; j++) {
+                arr.push(this.data[i][j]);
+            }
+        }
+        return arr;
+    }
+
     multiply(n) {
         // Scallor Product
         for(let i = 0; i < this.rows; i++){
@@ -54,10 +72,6 @@ class Matrix {
 
     add(n) {
         if (n instanceof Matrix) {
-            if (this.cols != n.rows) {
-                console.log("Cols of A must match rows of B");
-                return undefined;
-            }
             for (let i = 0; i < this.rows; i++){
                 for(let j = 0; j < this.cols; j++) {
                     this.data[i][j] += n.data[i][j];
@@ -85,7 +99,7 @@ class Matrix {
     randomize() {
         for(let i = 0; i < this.rows; i++){
             for(let j = 0; j < this.cols; j++) {
-                this.data[i][j] = Math.floor(Math.random() * 10);
+                this.data[i][j] = Math.floor(Math.random() * 2 - 1);
             }
         }
     }
