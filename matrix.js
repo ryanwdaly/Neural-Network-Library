@@ -1,4 +1,5 @@
 
+
 class Matrix {
     constructor(rows, cols) {
         this.rows = rows;
@@ -23,7 +24,7 @@ class Matrix {
 
     static multiply(a, b) {
         // Multiply product
-        if (a.cols != b.rows) {
+        if (a.cols !== b.rows) {
             console.log("Cols of A must match rows of B!");
             return undefined;
         }
@@ -39,13 +40,35 @@ class Matrix {
         } 
         return result;
     }
-
+ 
     static transpose(n) {
         let result = new Matrix(n.cols, n.rows);
 
         for (let i = 0; i < n.rows; i++){
             for (let j = 0; j < n.cols; j++) {
-                result.data[j][i] = n.data[i][j]
+                result.data[j][i] = n.data[i][j];
+            }
+        }
+        return result;
+    }
+
+    static subtract(a, b) {
+        let result = new Matrix(a.rows, a.cols);
+        for (let i = 0; i < result.rows; i++){
+            for(let j = 0; j < result.cols; j++) {
+                result.data[i][j] = a.data[i][j] - b.data[i][j];
+            }
+        }
+        return result;
+    }
+
+    static map(matrix, fn) {
+        let result = new Matrix(matrix.rows, matrix.cols);
+        // Apply a function to every element of matrix
+        for(let i = 0; i < matrix.rows; i++){
+            for(let j = 0; j < matrix.cols; j++) {
+                let val = matrix.data[i][j];
+                result.data[i][j] = fn(val);
             }
         }
         return result;
@@ -62,13 +85,22 @@ class Matrix {
     }
 
     multiply(n) {
-        // Scallor Product
-        for(let i = 0; i < this.rows; i++){
-            for(let j = 0; j < this.cols; j++) {
-                this.data[i][j] *= n;
+        if (n instanceof Matrix) {
+          // hadamard product
+          for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.cols; j++) {
+              this.data[i][j] *= n.data[i][j];
             }
+          }
+        } else {
+          // Scalar product
+          for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.cols; j++) {
+              this.data[i][j] *= n;
+            }
+          }
         }
-    }
+      }
 
     add(n) {
         if (n instanceof Matrix) {
@@ -90,16 +122,16 @@ class Matrix {
         let temp = new Matrix(this.cols, this.rows);
         for (let i = 0; i < this.rows; i++){
             for (let j = 0; j < this.cols; j++) {
-                temp.data[j][i] = this.data[i][j]
+                temp.data[j][i] = this.data[i][j];
             }
         }
-        this.data = temp.data
+        this.data = temp.data;
     }
 
     randomize() {
         for(let i = 0; i < this.rows; i++){
             for(let j = 0; j < this.cols; j++) {
-                this.data[i][j] = Math.floor(Math.random() * 2 - 1);
+                this.data[i][j] = Math.random() * 2 - 1;
             }
         }
     }
@@ -108,13 +140,17 @@ class Matrix {
         // Apply a function to every element of matrix
         for(let i = 0; i < this.rows; i++){
             for(let j = 0; j < this.cols; j++) {
-                let val = this.data[i][j]
+                let val = this.data[i][j];
                 this.data[i][j] = fn(val);
             }
         }
     }
 
     print() {
-        console.table(this.data)
+        console.table(this.data);
     }
+}
+
+if (typeof module !== 'undefined') {
+    module.exports = Matrix;
 }
